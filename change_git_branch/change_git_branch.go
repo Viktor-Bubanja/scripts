@@ -7,11 +7,14 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/fatih/color"
 )
 
 const copy_character = "c"
 
 func main() {
+	c := color.New(color.FgGreen)
 	num_branches := 10
 	command := fmt.Sprintf("git for-each-ref --sort='-authordate:iso8601' refs/heads | head -n%d", num_branches)
 	stdout, err := exec.Command("bash", "-c", command).Output()
@@ -29,7 +32,7 @@ func main() {
 		branch_prefix := "refs/heads/"
 		formatted_branch := strings.TrimPrefix(branch_name, branch_prefix)
 		formatted_branches[i] = formatted_branch
-		fmt.Print(fmt.Sprint(i) + " ")
+		c.Print("[" + fmt.Sprint(i) + "] ")
 		fmt.Println(formatted_branch)
 	}
 
