@@ -9,7 +9,6 @@ import (
 	"strings"
 )
 
-const copyCharacter = "c"
 const colorReset = "\033[0m"
 const colorGreen = "\033[32m"
 
@@ -37,14 +36,18 @@ func main() {
 
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("Change branch?")
-	input, _ := reader.ReadString('\n')
-	if string(input[0]) == copyCharacter {
+	userInput, _ := reader.ReadString('\n')
+	input := string(userInput[0])
+
+	if input == "n" || input == "\n" {
+		return
+	} else if input == "c" {
 		number, _ := strconv.ParseInt(string(input[1]), 10, 64)
 		branch_to_copy := formatted_branches[number]
 		copy_command := fmt.Sprintf("echo %s | pbcopy", branch_to_copy)
 		exec.Command("bash", "-c", copy_command).Output()
 	} else {
-		number, _ := strconv.Atoi(string(input[0]))
+		number, _ := strconv.Atoi(input)
 		branch_to_checkout := formatted_branches[number]
 		checkout_command := fmt.Sprintf("git checkout %s", branch_to_checkout)
 		exec.Command("bash", "-c", checkout_command).Output()
